@@ -49,7 +49,10 @@ func (this HttpServer) RegisterHandler(handlerName string, handler web.ServerHan
 		}
 		remoteAddr := request.RemoteAddr
 		ip := strings.Split(remoteAddr, ":")[0]
-		if _, ok {
+		if _, ok := remoteMap[ip]; !ok {
+			logrus.Warnf("http handler: %s, request from %s is not allowed", handlerName, remoteAddr)
+			_, err = writer.Write([]byte("request is not allowed"))
+			return
 
 		}
 		param := request.Form["body"][0]
