@@ -52,6 +52,7 @@ const (
 	ChaosbladeFileNotFound = 600
 	ResultUnmarshalFailed  = 601
 	Helm3ExecError         = 602
+	ScriptCreateFailed     = 701
 )
 
 var Errors = map[int32]string{
