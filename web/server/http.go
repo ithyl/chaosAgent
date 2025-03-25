@@ -31,7 +31,7 @@ type HttpServer struct {
 var remoteMap = make(map[string]int)
 
 func init() {
-	remoteMap["aaa"] = 1
+	remoteMap["192.168.0.205"] = 1
 }
 
 func NewHttpServer() web.APiServer {

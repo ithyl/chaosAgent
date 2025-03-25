@@ -39,8 +39,8 @@ func NewAPI() *API {
 
 func (api *API) Register(transportClient *transport.TransportClient) error {
 
-	chaosbladeHandler := NewServerRequestHandler(handler.NewChaosbladeHandler(transportClient))
-	if err := api.RegisterHandler("chaosblade", chaosbladeHandler); err != nil {
+	execScript := NewServerRequestHandler(handler.NewExecScriptHandler(transportClient))
+	if err := api.RegisterHandler("execScript", execScript); err != nil {
 		return err
 	}
 

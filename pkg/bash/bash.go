@@ -66,6 +66,33 @@ func ExecScript(ctx context.Context, script, args string) (string, string, bool)
 	return string(output), "", true
 }
 
+func AsyncExecScript(ctx context.Context, script, args string) (*exec.Cmd, string, bool) {
+	newCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
+	defer cancel()
+	if ctx == context.Background() {
+		ctx = newCtx
+	}
+	if !tools.IsExist(script) {
+		return nil, fmt.Sprintf("%s not found", script), false
+	}
+	// 这里需要区分windows || linux || darwin
+	var cmd *exec.Cmd
+	go func() {
+		if tools.IsWindows() {
+			cmd = exec.CommandContext(ctx, "cmd.exe", "/c", script+" "+args)
+		} else {
+			cmd = exec.CommandContext(ctx, "/bin/sh", "-c", script+" "+args)
+		}
+
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			//return string(output), err.Error(), false
+			fmt.Printf("/s", output)
+		}
+	}()
+
+	return cmd, "", true
+}
 func handleOsAgentResult(result string) (string, bool) {
 	sr := make(map[string]interface{})
 	// \u0001\u0000\u0000\u0000\u0000\u0000\u0000\u001c{\"exitCode\":0,\"errorMsg\":\"\"}
